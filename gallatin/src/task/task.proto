@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package task;
+
+service TaskService {
+  rpc Create(CreateTaskInput) returns (Task) {}
+  rpc FindAll (FindAllInput) returns (FindAllRes) {}
+  rpc FindOne (ById) returns (Task) {}
+  rpc Update (UpdateTaskInput) returns (Task) {}
+  rpc Remove (ById) returns (Task) {}
+}
+
+message CreateTaskInput {
+  optional string ParentId = 0;
+  string title = 1;
+  string description = 2;
+}
+
+message UpdateTaskInput {
+  string id = 0;
+  optional string ParentId = 1;
+  optional string title = 2;
+  optional string description = 3;
+}
+
+message ById {
+  string id = 0;
+}
+
+message Task {
+  string id = 0;
+  optional Task ParentId = 1;
+  string title = 2;
+  string description = 3;
+  uint64 createAt = 4;
+  uint64 updateAt = 5;
+}
+
+message Filter {
+  optional string ParentId = 0;
+  optional string title = 1;
+  optional string description = 2;
+}
+
+message Sort {
+  string field = 0;
+  string order = 1;
+}
+
+message Pagination {
+  int32 limit = 0;
+  int32 page = 1;
+}
+
+message FindAllInput {
+  Pagination pagination = 0;
+  Filter filter = 1;
+  repeated Sort sort = 3;
+}
+
+message FindAllRes {
+  repeated Task data = 0;
+  int32 count = 1;
+}
